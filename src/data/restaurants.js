@@ -1,0 +1,266 @@
+// Mock restaurant data for development
+export const restaurants = [
+  {
+    id: 'rest_001',
+    name: "Valentino's Pizzeria",
+    description: 'Authentic Neapolitan pizza made with imported Italian ingredients and wood-fired in our custom brick oven.',
+    cuisine: ['Italian', 'Pizza'],
+    priceLevel: 2,
+    location: {
+      address: '1501 S Congress Ave',
+      city: 'Austin',
+      state: 'TX',
+      zipCode: '78704',
+      coordinates: { lat: 30.2456, lng: -97.7499 },
+    },
+    hours: {
+      monday: { open: '11:00', close: '22:00' },
+      tuesday: { open: '11:00', close: '22:00' },
+      wednesday: { open: '11:00', close: '22:00' },
+      thursday: { open: '11:00', close: '23:00' },
+      friday: { open: '11:00', close: '23:00' },
+      saturday: { open: '11:00', close: '23:00' },
+      sunday: { open: '12:00', close: '21:00' },
+    },
+    photo: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800',
+    rating: 4.8,
+    reviewCount: 2450,
+    features: ['outdoor_seating', 'wifi', 'full_bar'],
+    isAvailable: true,
+    nextAvailableTime: '7:30 PM',
+    distance: 0.8,
+  },
+  {
+    id: 'rest_002',
+    name: 'Uchi',
+    description: 'Award-winning contemporary Japanese restaurant featuring innovative sushi and seasonal omakase.',
+    cuisine: ['Japanese', 'Sushi'],
+    priceLevel: 4,
+    location: {
+      address: '801 S Lamar Blvd',
+      city: 'Austin',
+      state: 'TX',
+      zipCode: '78704',
+      coordinates: { lat: 30.2571, lng: -97.7612 },
+    },
+    hours: {
+      monday: { open: '17:00', close: '22:00' },
+      tuesday: { open: '17:00', close: '22:00' },
+      wednesday: { open: '17:00', close: '22:00' },
+      thursday: { open: '17:00', close: '22:00' },
+      friday: { open: '17:00', close: '23:00' },
+      saturday: { open: '17:00', close: '23:00' },
+      sunday: { open: '17:00', close: '21:00' },
+    },
+    photo: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=800',
+    rating: 4.9,
+    reviewCount: 3200,
+    features: ['full_bar', 'private_dining', 'valet'],
+    isAvailable: true,
+    nextAvailableTime: '8:00 PM',
+    distance: 1.2,
+  },
+  {
+    id: 'rest_003',
+    name: 'Franklin Barbecue',
+    description: 'Legendary Texas BBQ known for melt-in-your-mouth brisket. Worth every minute of the wait.',
+    cuisine: ['BBQ', 'American'],
+    priceLevel: 2,
+    location: {
+      address: '900 E 11th St',
+      city: 'Austin',
+      state: 'TX',
+      zipCode: '78702',
+      coordinates: { lat: 30.2701, lng: -97.7253 },
+    },
+    hours: {
+      tuesday: { open: '11:00', close: '15:00' },
+      wednesday: { open: '11:00', close: '15:00' },
+      thursday: { open: '11:00', close: '15:00' },
+      friday: { open: '11:00', close: '15:00' },
+      saturday: { open: '11:00', close: '15:00' },
+      sunday: { open: '11:00', close: '15:00' },
+    },
+    photo: 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=800',
+    rating: 4.7,
+    reviewCount: 8500,
+    features: ['outdoor_seating', 'byob'],
+    isAvailable: false,
+    nextAvailableTime: 'Tomorrow 11 AM',
+    distance: 2.1,
+  },
+  {
+    id: 'rest_004',
+    name: 'Torchy\'s Tacos',
+    description: 'Damn good tacos with creative flavor combinations. A true Austin original.',
+    cuisine: ['Mexican', 'Tacos'],
+    priceLevel: 1,
+    location: {
+      address: '1311 S 1st St',
+      city: 'Austin',
+      state: 'TX',
+      zipCode: '78704',
+      coordinates: { lat: 30.2512, lng: -97.7551 },
+    },
+    hours: {
+      monday: { open: '07:00', close: '22:00' },
+      tuesday: { open: '07:00', close: '22:00' },
+      wednesday: { open: '07:00', close: '22:00' },
+      thursday: { open: '07:00', close: '22:00' },
+      friday: { open: '07:00', close: '23:00' },
+      saturday: { open: '08:00', close: '23:00' },
+      sunday: { open: '08:00', close: '22:00' },
+    },
+    photo: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=800',
+    rating: 4.5,
+    reviewCount: 4200,
+    features: ['outdoor_seating', 'breakfast'],
+    isAvailable: true,
+    nextAvailableTime: 'Now',
+    distance: 0.5,
+  },
+  {
+    id: 'rest_005',
+    name: 'Suerte',
+    description: 'Modern Mexican restaurant celebrating heritage ingredients with contemporary techniques.',
+    cuisine: ['Mexican', 'Contemporary'],
+    priceLevel: 3,
+    location: {
+      address: '1800 E 6th St',
+      city: 'Austin',
+      state: 'TX',
+      zipCode: '78702',
+      coordinates: { lat: 30.2621, lng: -97.7205 },
+    },
+    hours: {
+      monday: { open: '17:00', close: '22:00' },
+      tuesday: { open: '17:00', close: '22:00' },
+      wednesday: { open: '17:00', close: '22:00' },
+      thursday: { open: '17:00', close: '22:00' },
+      friday: { open: '17:00', close: '23:00' },
+      saturday: { open: '17:00', close: '23:00' },
+      sunday: { open: '17:00', close: '21:00' },
+    },
+    photo: 'https://images.unsplash.com/photo-1625167171794-e72fa4ba67c8?w=800',
+    rating: 4.6,
+    reviewCount: 1890,
+    features: ['full_bar', 'outdoor_seating'],
+    isAvailable: true,
+    nextAvailableTime: '6:30 PM',
+    distance: 1.8,
+  },
+  {
+    id: 'rest_006',
+    name: 'Ramen Tatsu-Ya',
+    description: 'Soul-warming ramen with rich, complex broths simmered for over 20 hours.',
+    cuisine: ['Japanese', 'Ramen'],
+    priceLevel: 2,
+    location: {
+      address: '8557 Research Blvd',
+      city: 'Austin',
+      state: 'TX',
+      zipCode: '78758',
+      coordinates: { lat: 30.3582, lng: -97.7195 },
+    },
+    hours: {
+      monday: { open: '11:00', close: '22:00' },
+      tuesday: { open: '11:00', close: '22:00' },
+      wednesday: { open: '11:00', close: '22:00' },
+      thursday: { open: '11:00', close: '22:00' },
+      friday: { open: '11:00', close: '23:00' },
+      saturday: { open: '11:00', close: '23:00' },
+      sunday: { open: '11:00', close: '21:00' },
+    },
+    photo: 'https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=800',
+    rating: 4.7,
+    reviewCount: 3100,
+    features: ['no_reservations', 'counter_seating'],
+    isAvailable: true,
+    nextAvailableTime: 'Now',
+    distance: 3.5,
+  },
+  {
+    id: 'rest_007',
+    name: 'Odd Duck',
+    description: 'Farm-to-table small plates showcasing the best of Texas ingredients.',
+    cuisine: ['American', 'Farm-to-table'],
+    priceLevel: 3,
+    location: {
+      address: '1201 S Lamar Blvd',
+      city: 'Austin',
+      state: 'TX',
+      zipCode: '78704',
+      coordinates: { lat: 30.2485, lng: -97.7649 },
+    },
+    hours: {
+      tuesday: { open: '17:00', close: '22:00' },
+      wednesday: { open: '17:00', close: '22:00' },
+      thursday: { open: '17:00', close: '22:00' },
+      friday: { open: '17:00', close: '23:00' },
+      saturday: { open: '10:00', close: '23:00' },
+      sunday: { open: '10:00', close: '14:00' },
+    },
+    photo: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800',
+    rating: 4.5,
+    reviewCount: 2340,
+    features: ['brunch', 'outdoor_seating', 'full_bar'],
+    isAvailable: true,
+    nextAvailableTime: '7:00 PM',
+    distance: 1.1,
+  },
+  {
+    id: 'rest_008',
+    name: 'Thai Fresh',
+    description: 'Organic Thai cuisine made from scratch using family recipes and local ingredients.',
+    cuisine: ['Thai', 'Organic'],
+    priceLevel: 2,
+    location: {
+      address: '909 W Mary St',
+      city: 'Austin',
+      state: 'TX',
+      zipCode: '78704',
+      coordinates: { lat: 30.2461, lng: -97.7584 },
+    },
+    hours: {
+      monday: { open: '11:00', close: '21:00' },
+      tuesday: { open: '11:00', close: '21:00' },
+      wednesday: { open: '11:00', close: '21:00' },
+      thursday: { open: '11:00', close: '21:00' },
+      friday: { open: '11:00', close: '22:00' },
+      saturday: { open: '11:00', close: '22:00' },
+      sunday: { open: '11:00', close: '21:00' },
+    },
+    photo: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?w=800',
+    rating: 4.4,
+    reviewCount: 1560,
+    features: ['vegetarian_friendly', 'outdoor_seating', 'cooking_classes'],
+    isAvailable: true,
+    nextAvailableTime: 'Now',
+    distance: 0.9,
+  },
+];
+
+// Helper functions
+export const getRestaurantById = (id) => restaurants.find((r) => r.id === id);
+
+export const filterRestaurants = ({ cuisine, priceLevel, minRating, maxDistance }) => {
+  return restaurants.filter((r) => {
+    if (cuisine && !r.cuisine.some((c) => c.toLowerCase().includes(cuisine.toLowerCase()))) {
+      return false;
+    }
+    if (priceLevel && r.priceLevel > priceLevel) return false;
+    if (minRating && r.rating < minRating) return false;
+    if (maxDistance && r.distance > maxDistance) return false;
+    return true;
+  });
+};
+
+export const searchRestaurants = (query) => {
+  const q = query.toLowerCase();
+  return restaurants.filter(
+    (r) =>
+      r.name.toLowerCase().includes(q) ||
+      r.cuisine.some((c) => c.toLowerCase().includes(q)) ||
+      r.description.toLowerCase().includes(q)
+  );
+};
