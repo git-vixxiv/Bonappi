@@ -8,6 +8,7 @@ import StatusScreen from './screens/status/StatusScreen';
 import ProfileScreen from './screens/profile/ProfileScreen';
 import LoginScreen from './screens/auth/LoginScreen';
 import RestaurantScreen from './screens/restaurant/RestaurantScreen';
+import DishScreen from './screens/restaurant/DishScreen';
 
 // Placeholder screens for routes we haven't built yet
 const PlaceholderScreen = ({ title }) => (
@@ -56,7 +57,7 @@ export const router = createBrowserRouter([
       },
       {
         path: ROUTES.DISH,
-        element: <PlaceholderScreen title="Dish Details" />,
+        element: <DishScreen />,
       },
       {
         path: ROUTES.CART,
