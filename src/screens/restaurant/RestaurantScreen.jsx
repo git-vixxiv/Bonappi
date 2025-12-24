@@ -63,7 +63,7 @@ export default function RestaurantScreen() {
   } = restaurant;
 
   // Get today's hours
-  const today = new Date().toLocaleDateString('en-US', { weekday: 'lowercase' });
+  const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
   const todayHours = hours[today];
 
   return (
