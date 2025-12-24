@@ -1,13 +1,17 @@
 import { useState, useMemo } from 'react';
-import { Search, SlidersHorizontal, CalendarDays } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Search, SlidersHorizontal, ShoppingBag } from 'lucide-react';
 import { Header } from '../../components/layout';
 import { Button, Input } from '../../components/ui';
 import { RestaurantCard } from '../../components/restaurant';
 import { restaurants, searchRestaurants } from '../../data';
-import { useAuth } from '../../contexts';
+import { useAuth, useCart } from '../../contexts';
+import { ROUTES } from '../../constants/routes';
 
 export default function DiscoveryScreen() {
+  const navigate = useNavigate();
   const { user } = useAuth();
+  const { itemCount } = useCart();
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
@@ -27,13 +31,17 @@ export default function DiscoveryScreen() {
         showLocation
         location={location}
         rightAction={
-          <Button
-            variant="primary"
-            size="sm"
-            leftIcon={<CalendarDays className="w-4 h-4" />}
+          <button
+            onClick={() => navigate(ROUTES.CART)}
+            className="relative p-2 rounded-full hover:bg-gray-100 transition-colors"
           >
-            Reserve
-          </Button>
+            <ShoppingBag className="w-6 h-6 text-gray-700" />
+            {itemCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary-600 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                {itemCount > 9 ? '9+' : itemCount}
+              </span>
+            )}
+          </button>
         }
       />
 
