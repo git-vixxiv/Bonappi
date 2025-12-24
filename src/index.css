@@ -2,17 +2,29 @@
 
 /* BonAppi Theme Configuration */
 @theme {
-  /* Primary Colors */
-  --color-primary-50: #eff6ff;
-  --color-primary-100: #dbeafe;
-  --color-primary-200: #bfdbfe;
-  --color-primary-300: #93c5fd;
-  --color-primary-400: #60a5fa;
-  --color-primary-500: #3b82f6;
-  --color-primary-600: #2563eb;
-  --color-primary-700: #1d4ed8;
-  --color-primary-800: #1e40af;
-  --color-primary-900: #1e3a8a;
+  /* Primary Colors - Bonappi Blue (#1f4a6d) */
+  --color-primary-50: #f0f5f8;
+  --color-primary-100: #d9e5ed;
+  --color-primary-200: #b3cce0;
+  --color-primary-300: #8db2d0;
+  --color-primary-400: #5a8db5;
+  --color-primary-500: #3a6d94;
+  --color-primary-600: #1f4a6d;
+  --color-primary-700: #1a3f5c;
+  --color-primary-800: #15334a;
+  --color-primary-900: #102839;
+
+  /* Accent Colors - Bonappi Gold (#c9a662) */
+  --color-gold-50: #fdf9f0;
+  --color-gold-100: #f9f0d9;
+  --color-gold-200: #f0ddb3;
+  --color-gold-300: #e5c88a;
+  --color-gold-400: #d4b070;
+  --color-gold-500: #c9a662;
+  --color-gold-600: #b8944d;
+  --color-gold-700: #9a7a3d;
+  --color-gold-800: #7c6230;
+  --color-gold-900: #5e4a24;
 
   /* Success/Status Colors */
   --color-success-50: #f0fdf4;

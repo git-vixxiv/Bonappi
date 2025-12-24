@@ -28,6 +28,7 @@ export default function DiscoveryScreen() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <Header
+        showLogo
         showLocation
         location={location}
         rightAction={
@@ -46,7 +47,7 @@ export default function DiscoveryScreen() {
       />
 
       {/* Search and Filters */}
-      <div className="sticky top-14 z-30 bg-gray-50 px-4 py-3 border-b border-gray-100">
+      <div className="sticky top-16 z-30 bg-gray-50 px-4 py-3 border-b border-gray-100">
         <div className="flex gap-2">
           <div className="flex-1">
             <Input

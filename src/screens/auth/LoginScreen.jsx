@@ -40,11 +40,13 @@ export default function LoginScreen() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
       <div className="flex-1 flex flex-col justify-center px-4 py-12">
-        {/* Logo/Title */}
+        {/* Logo */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-primary-600 mb-2">
-            BonAppi
-          </h1>
+          <img
+            src="/logo.png"
+            alt="BonAppi"
+            className="h-16 w-auto mx-auto mb-3"
+          />
           <p className="text-gray-500">
             Your dining companion
           </p>

@@ -5,6 +5,7 @@ export default function Header({
   title,
   subtitle,
   showBack = false,
+  showLogo = false,
   showLocation = false,
   location,
   rightAction,
@@ -25,7 +26,7 @@ export default function Header({
         ${className}
       `}
     >
-      <div className="flex items-center justify-between h-14 px-4 max-w-lg mx-auto">
+      <div className={`flex items-center justify-between px-4 max-w-lg mx-auto ${showLogo ? 'h-16' : 'h-14'}`}>
         {/* Left section */}
         <div className="flex items-center gap-3 flex-1">
           {showBack && (
@@ -37,7 +38,14 @@ export default function Header({
               <ArrowLeft className="w-5 h-5 text-gray-700" />
             </button>
           )}
-          {showLocation && location && (
+          {showLogo && (
+            <img
+              src="/logo.png"
+              alt="BonAppi"
+              className="h-10 w-auto"
+            />
+          )}
+          {showLocation && location && !showLogo && (
             <div className="flex items-center gap-1.5 text-gray-700">
               <MapPin className="w-4 h-4 text-primary-600" />
               <span className="text-sm font-medium">{location}</span>
@@ -52,6 +60,14 @@ export default function Header({
             </div>
           )}
         </div>
+
+        {/* Location on right when logo is shown */}
+        {showLogo && showLocation && location && (
+          <div className="flex items-center gap-1.5 text-gray-600 mr-3">
+            <MapPin className="w-4 h-4 text-gold-500" />
+            <span className="text-sm font-medium">{location}</span>
+          </div>
+        )}
 
         {/* Right section */}
         {rightAction && (
