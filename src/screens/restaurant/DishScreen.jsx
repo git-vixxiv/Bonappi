@@ -11,7 +11,7 @@ import {
 import { Button, Card, Badge, StarRating, Textarea } from '../../components/ui';
 import { getRestaurantById } from '../../data/restaurants';
 import { getMenuItemById } from '../../data/menuItems';
-import { ROUTES } from '../../constants/routes';
+import { ROUTES, getReviewRoute } from '../../constants/routes';
 import { useCart } from '../../contexts';
 
 export default function DishScreen() {
@@ -165,7 +165,10 @@ export default function DishScreen() {
                 className={`w-5 h-5 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-700'}`}
               />
             </button>
-            <button className="w-10 h-10 rounded-full bg-white/90 backdrop-blur flex items-center justify-center shadow-sm">
+            <button
+              onClick={() => navigate(getReviewRoute(restaurantId, dishId))}
+              className="w-10 h-10 rounded-full bg-white/90 backdrop-blur flex items-center justify-center shadow-sm"
+            >
               <Camera className="w-5 h-5 text-gray-700" />
             </button>
           </div>

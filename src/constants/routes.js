@@ -13,6 +13,8 @@ export const ROUTES = {
   // Restaurant routes
   RESTAURANT: '/restaurant/:id',
   DISH: '/restaurant/:restaurantId/dish/:dishId',
+  REVIEW: '/restaurant/:restaurantId/review',
+  REVIEW_DISH: '/restaurant/:restaurantId/dish/:dishId/review',
 
   // Reservation routes
   RESERVATION: '/reservation',
@@ -37,4 +39,6 @@ export const ROUTES = {
 // Helper to generate dynamic routes
 export const getRestaurantRoute = (id) => `/restaurant/${id}`;
 export const getDishRoute = (restaurantId, dishId) => `/restaurant/${restaurantId}/dish/${dishId}`;
+export const getReviewRoute = (restaurantId, dishId = null) =>
+  dishId ? `/restaurant/${restaurantId}/dish/${dishId}/review` : `/restaurant/${restaurantId}/review`;
 export const getOrderConfirmationRoute = (orderId) => `/order/${orderId}/confirmation`;

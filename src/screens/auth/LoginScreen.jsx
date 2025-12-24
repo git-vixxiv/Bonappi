@@ -47,8 +47,8 @@ export default function LoginScreen() {
             alt="BonAppi"
             className="h-16 w-auto mx-auto mb-3"
           />
-          <p className="text-gray-500">
-            Your dining companion
+          <p className="text-gray-500 italic">
+            Enjoy your meal.
           </p>
         </div>
 
