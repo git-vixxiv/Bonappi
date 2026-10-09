@@ -10,16 +10,8 @@ import LoginScreen from './screens/auth/LoginScreen';
 import RestaurantScreen from './screens/restaurant/RestaurantScreen';
 import DishScreen from './screens/restaurant/DishScreen';
 import CartScreen from './screens/cart/CartScreen';
+import PlaceholderScreen from './screens/PlaceholderScreen';
 
-// Placeholder screens for routes we haven't built yet
-const PlaceholderScreen = ({ title }) => (
-  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-    <div className="text-center">
-      <h1 className="text-xl font-semibold text-gray-900 mb-2">{title}</h1>
-      <p className="text-gray-500">Coming soon</p>
-    </div>
-  </div>
-);
 
 export const router = createBrowserRouter([
   // Auth routes (no bottom nav)
@@ -29,11 +21,7 @@ export const router = createBrowserRouter([
   },
   {
     path: ROUTES.REGISTER,
-    element: <PlaceholderScreen title="Register" />,
-  },
-  {
-    path: ROUTES.FORGOT_PASSWORD,
-    element: <PlaceholderScreen title="Forgot Password" />,
+    element: <LoginScreen />,
   },
 
   // Main app routes (with bottom nav)

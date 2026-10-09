@@ -4,7 +4,6 @@ export const ROUTES = {
   LOGIN: '/login',
   REGISTER: '/register',
   ONBOARDING: '/onboarding',
-  FORGOT_PASSWORD: '/forgot-password',
 
   // Main app routes
   HOME: '/',

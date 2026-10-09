@@ -4,7 +4,7 @@ import { Search, SlidersHorizontal, ShoppingBag } from 'lucide-react';
 import { Header } from '../../components/layout';
 import { Button, Input } from '../../components/ui';
 import { RestaurantCard } from '../../components/restaurant';
-import { restaurants, searchRestaurants } from '../../data';
+import { useRestaurants } from '../../hooks/useRestaurants';
 import { useAuth, useCart } from '../../contexts';
 import { ROUTES } from '../../constants/routes';
 
@@ -15,10 +15,19 @@ export default function DiscoveryScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
+  const { data: restaurants, loading, error } = useRestaurants();
+
   const filteredRestaurants = useMemo(() => {
-    if (!searchQuery.trim()) return restaurants;
-    return searchRestaurants(searchQuery);
-  }, [searchQuery]);
+    const all = restaurants ?? [];
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return all;
+    return all.filter(
+      (r) =>
+        r.name.toLowerCase().includes(q) ||
+        r.cuisine.some((c) => c.toLowerCase().includes(q)) ||
+        r.description.toLowerCase().includes(q)
+    );
+  }, [restaurants, searchQuery]);
 
   const location = user?.location
     ? `${user.location.city}, ${user.location.state}`
@@ -83,7 +92,18 @@ export default function DiscoveryScreen() {
 
       {/* Restaurant List */}
       <div className="px-4 py-4">
-        {filteredRestaurants.length === 0 ? (
+        {loading ? (
+          <div className="space-y-4" aria-label="Loading restaurants">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="h-64 rounded-2xl bg-gray-200 animate-pulse" />
+            ))}
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-gray-500 mb-2">Could not load restaurants</p>
+            <p className="text-sm text-gray-400">Check your connection and try again.</p>
+          </div>
+        ) : filteredRestaurants.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-500 mb-2">No restaurants found</p>
             <p className="text-sm text-gray-400">

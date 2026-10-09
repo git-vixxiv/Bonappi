@@ -51,16 +51,9 @@ src/
 └── data/             # Mock data for development
 ```
 
-## Features (MVP)
+## Pilot scope
 
-- [ ] Restaurant discovery and browsing
-- [ ] Menu viewing with full dish customization
-- [ ] Cart and checkout with Stripe
-- [ ] Reservation system
-- [ ] User authentication
-- [ ] "My Usual" order saving
-- [ ] Review and rating system
-- [ ] Status/gamification system
+See [docs/PILOT_SPEC.md](docs/PILOT_SPEC.md) for the approved pilot scope and [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) for sequencing.
 
 ## License
 

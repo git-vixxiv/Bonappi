@@ -9,8 +9,8 @@ import {
   Check,
 } from 'lucide-react';
 import { Button, Card, Badge, StarRating, Textarea } from '../../components/ui';
-import { getRestaurantById } from '../../data/restaurants';
-import { getMenuItemById } from '../../data/menuItems';
+import { ScreenState } from '../../components/layout';
+import { useRestaurant } from '../../hooks/useRestaurants';
 import { ROUTES } from '../../constants/routes';
 import { useCart } from '../../contexts';
 
@@ -19,12 +19,13 @@ export default function DishScreen() {
   const navigate = useNavigate();
   const { addItem, setRestaurant } = useCart();
 
-  const restaurant = getRestaurantById(restaurantId);
-  const dish = getMenuItemById(restaurantId, dishId);
+  const { data, loading, error } = useRestaurant(restaurantId);
+  const restaurant = data?.restaurant;
+  const dish = data?.menu.find((item) => item.id === dishId);
 
   // Selection state
-  const [selectedSize, setSelectedSize] = useState(null);
-  const [selectedCrust, setSelectedCrust] = useState(null);
+  const [sizeChoice, setSelectedSize] = useState(null);
+  const [crustChoice, setSelectedCrust] = useState(null);
   const [selectedToppings, setSelectedToppings] = useState([]);
   const [comboSelected, setComboSelected] = useState(false);
   const [selectedDrink, setSelectedDrink] = useState(null);
@@ -33,21 +34,12 @@ export default function DishScreen() {
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  // Initialize defaults when dish loads
-  useMemo(() => {
-    if (dish?.customizations) {
-      const { sizes, crustOptions } = dish.customizations;
-      if (sizes?.length && !selectedSize) {
-        // Default to medium or first option
-        const defaultSize = sizes.find(s => s.priceModifier === 0) || sizes[0];
-        setSelectedSize(defaultSize.id);
-      }
-      if (crustOptions?.length && !selectedCrust) {
-        const defaultCrust = crustOptions.find(c => c.priceModifier === 0) || crustOptions[0];
-        setSelectedCrust(defaultCrust.id);
-      }
-    }
-  }, [dish]);
+  // Fall back to the no-upcharge option (or the first) until the user picks one
+  const { sizes, crustOptions } = dish?.customizations || {};
+  const defaultOption = (options) =>
+    options?.length ? (options.find((o) => o.priceModifier === 0) || options[0]).id : null;
+  const selectedSize = sizeChoice ?? defaultOption(sizes);
+  const selectedCrust = crustChoice ?? defaultOption(crustOptions);
 
   // Calculate total price
   const totalPrice = useMemo(() => {
@@ -124,14 +116,15 @@ export default function DishScreen() {
     navigate(-1);
   };
 
-  if (!dish || !restaurant) {
+  if (loading) return <ScreenState loading />;
+  if (error || !dish || !restaurant) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-xl font-semibold text-gray-900 mb-2">Dish not found</h1>
-          <Button onClick={() => navigate(ROUTES.HOME)}>Go Home</Button>
-        </div>
-      </div>
+      <ScreenState
+        title={error ? 'Could not load dish' : 'Dish not found'}
+        message={error ? 'Check your connection and try again.' : undefined}
+        actionLabel="Go Home"
+        onAction={() => navigate(ROUTES.HOME)}
+      />
     );
   }
 
