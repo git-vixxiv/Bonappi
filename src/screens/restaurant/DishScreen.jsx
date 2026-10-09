@@ -96,7 +96,7 @@ export default function DishScreen() {
   const handleAddToOrder = () => {
     if (!dish || !restaurant) return;
 
-    setRestaurant(restaurantId, restaurant.name);
+    setRestaurant(restaurant);
 
     addItem({
       dishId: dish.id,

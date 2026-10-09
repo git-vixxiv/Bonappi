@@ -1,31 +1,39 @@
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useEffect, useReducer } from 'react';
 
 const CartContext = createContext(null);
+
+const STORAGE_KEY = 'bonappi_cart_v2';
+const DEFAULT_TAX_RATE = 0.0825;
+const DEFAULT_MIN_ORDER = 20;
 
 const initialState = {
   restaurantId: null,
   restaurantName: null,
+  taxRate: DEFAULT_TAX_RATE,
+  minOrder: DEFAULT_MIN_ORDER,
   items: [],
+  // { arrivalAt: ISO string, partySize: number }
   reservation: null,
-  tip: { percentage: 18, amount: 0 },
 };
+
+// Restore the cart after a reload; storage can be unavailable (private mode)
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    return saved?.items ? { ...initialState, ...saved } : initialState;
+  } catch {
+    return initialState;
+  }
+}
 
 function cartReducer(state, action) {
   switch (action.type) {
     case 'SET_RESTAURANT':
       // Clear cart if switching restaurants
       if (state.restaurantId && state.restaurantId !== action.payload.id) {
-        return {
-          ...initialState,
-          restaurantId: action.payload.id,
-          restaurantName: action.payload.name,
-        };
+        return { ...initialState, ...action.payload };
       }
-      return {
-        ...state,
-        restaurantId: action.payload.id,
-        restaurantName: action.payload.name,
-      };
+      return { ...state, ...action.payload };
 
     case 'ADD_ITEM': {
       const existingIndex = state.items.findIndex(
@@ -81,12 +89,6 @@ function cartReducer(state, action) {
         reservation: action.payload,
       };
 
-    case 'SET_TIP':
-      return {
-        ...state,
-        tip: action.payload,
-      };
-
     case 'CLEAR_CART':
       return initialState;
 
@@ -96,18 +98,25 @@ function cartReducer(state, action) {
 }
 
 export function CartProvider({ children }) {
-  const [state, dispatch] = useReducer(cartReducer, initialState);
+  const [state, dispatch] = useReducer(cartReducer, undefined, loadState);
 
-  // Calculate totals
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch {
+      // Cart still works for this visit without storage
+    }
+  }, [state]);
+
+  // Displayed totals; the server recalculates from menu prices at checkout.
+  // Tips are left at the table, not prepaid.
   const subtotal = state.items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-  const tax = subtotal * 0.0825; // 8.25% tax (Austin, TX rate)
-  const tipAmount = state.tip.percentage
-    ? subtotal * (state.tip.percentage / 100)
-    : state.tip.amount;
-  const total = subtotal + tax + tipAmount;
+  const tax = Math.round(subtotal * state.taxRate * 100) / 100;
+  const total = subtotal + tax;
+  const amountToMinimum = Math.max(0, state.minOrder - subtotal);
 
   const itemCount = state.items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -115,12 +124,21 @@ export function CartProvider({ children }) {
     ...state,
     subtotal,
     tax,
-    tipAmount,
     total,
     itemCount,
+    amountToMinimum,
+    meetsMinimum: amountToMinimum === 0,
 
-    setRestaurant: (id, name) =>
-      dispatch({ type: 'SET_RESTAURANT', payload: { id, name } }),
+    setRestaurant: (restaurant) =>
+      dispatch({
+        type: 'SET_RESTAURANT',
+        payload: {
+          restaurantId: restaurant.id,
+          restaurantName: restaurant.name,
+          taxRate: restaurant.taxRate ?? DEFAULT_TAX_RATE,
+          minOrder: restaurant.minOrder ?? DEFAULT_MIN_ORDER,
+        },
+      }),
 
     addItem: (item) =>
       dispatch({ type: 'ADD_ITEM', payload: item }),
@@ -133,9 +151,6 @@ export function CartProvider({ children }) {
 
     setReservation: (reservation) =>
       dispatch({ type: 'SET_RESERVATION', payload: reservation }),
-
-    setTip: (tip) =>
-      dispatch({ type: 'SET_TIP', payload: tip }),
 
     clearCart: () =>
       dispatch({ type: 'CLEAR_CART' }),
