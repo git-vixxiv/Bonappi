@@ -24,7 +24,7 @@ Scope is defined in [docs/PILOT_SPEC.md](docs/PILOT_SPEC.md). This plan sequence
 - [x] Phone + SMS code sign-in for diners; email sign-in for restaurant staff (SMS provider still to configure)
 - [x] Replace mock data layer with Supabase queries; seed sample Austin menus
 - [x] Vercel deploy with preview URLs per PR
-- [ ] PWA manifest, icons, installable on iOS/Android
+- [x] PWA manifest, icons, installable on iOS/Android (icons generated from the wordmark; a square mark would read better)
 
 ## Phase 2: Order + pay (weeks 2–3) → **first restaurant demo**
 
