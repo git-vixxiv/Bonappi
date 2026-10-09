@@ -14,6 +14,7 @@ export default function RestaurantCard({ restaurant }) {
     reviewCount,
     priceLevel,
     isAvailable,
+    isOpen,
     nextAvailableTime,
     distance,
   } = restaurant;
@@ -73,8 +74,8 @@ export default function RestaurantCard({ restaurant }) {
         {/* Availability */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <Clock className={`w-4 h-4 ${isAvailable ? 'text-success-500' : 'text-gray-400'}`} />
-            <span className={`text-sm font-medium ${isAvailable ? 'text-success-600' : 'text-gray-500'}`}>
+            <Clock className={`w-4 h-4 ${isOpen ? 'text-success-500' : 'text-gray-400'}`} />
+            <span className={`text-sm font-medium ${isOpen ? 'text-success-600' : 'text-gray-500'}`}>
               {nextAvailableTime}
             </span>
           </div>

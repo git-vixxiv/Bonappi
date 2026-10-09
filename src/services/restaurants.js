@@ -77,7 +77,10 @@ export function mapRestaurant(row) {
     rating: Number(row.rating),
     reviewCount: row.review_count,
     features: row.features,
-    isAvailable: row.accepting_orders && status.isOpen,
+    // Pre-orders can be placed while closed, so availability tracks the
+    // restaurant's order switch; open status is shown as a label
+    isAvailable: row.accepting_orders,
+    isOpen: status.isOpen,
     nextAvailableTime: row.accepting_orders ? status.label : 'Not taking orders',
     distance: distanceMiles(DEFAULT_ORIGIN, coordinates),
     minOrder: row.min_order_cents / 100,
