@@ -23,8 +23,8 @@ export default function DishScreen() {
   const dish = getMenuItemById(restaurantId, dishId);
 
   // Selection state
-  const [selectedSize, setSelectedSize] = useState(null);
-  const [selectedCrust, setSelectedCrust] = useState(null);
+  const [sizeChoice, setSelectedSize] = useState(null);
+  const [crustChoice, setSelectedCrust] = useState(null);
   const [selectedToppings, setSelectedToppings] = useState([]);
   const [comboSelected, setComboSelected] = useState(false);
   const [selectedDrink, setSelectedDrink] = useState(null);
@@ -33,21 +33,12 @@ export default function DishScreen() {
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  // Initialize defaults when dish loads
-  useMemo(() => {
-    if (dish?.customizations) {
-      const { sizes, crustOptions } = dish.customizations;
-      if (sizes?.length && !selectedSize) {
-        // Default to medium or first option
-        const defaultSize = sizes.find(s => s.priceModifier === 0) || sizes[0];
-        setSelectedSize(defaultSize.id);
-      }
-      if (crustOptions?.length && !selectedCrust) {
-        const defaultCrust = crustOptions.find(c => c.priceModifier === 0) || crustOptions[0];
-        setSelectedCrust(defaultCrust.id);
-      }
-    }
-  }, [dish]);
+  // Fall back to the no-upcharge option (or the first) until the user picks one
+  const { sizes, crustOptions } = dish?.customizations || {};
+  const defaultOption = (options) =>
+    options?.length ? (options.find((o) => o.priceModifier === 0) || options[0]).id : null;
+  const selectedSize = sizeChoice ?? defaultOption(sizes);
+  const selectedCrust = crustChoice ?? defaultOption(crustOptions);
 
   // Calculate total price
   const totalPrice = useMemo(() => {

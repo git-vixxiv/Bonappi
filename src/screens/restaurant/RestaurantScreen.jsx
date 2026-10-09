@@ -14,8 +14,8 @@ import {
 import { Button, Card, Badge, StarRating, PriceLevel } from '../../components/ui';
 import { MenuItemCard } from '../../components/restaurant';
 import { getRestaurantById } from '../../data/restaurants';
-import { getMenuByRestaurant, getPopularItems, getItemsByCategory } from '../../data/menuItems';
-import { getDishRoute, ROUTES } from '../../constants/routes';
+import { getPopularItems, getItemsByCategory } from '../../data/menuItems';
+import { ROUTES } from '../../constants/routes';
 import { useAuth } from '../../contexts';
 
 const TABS = [
@@ -32,7 +32,6 @@ export default function RestaurantScreen() {
   const [isFavorite, setIsFavorite] = useState(false);
 
   const restaurant = getRestaurantById(id);
-  const menuItems = getMenuByRestaurant(id);
   const popularItems = getPopularItems(id);
   const itemsByCategory = useMemo(() => getItemsByCategory(id), [id]);
 

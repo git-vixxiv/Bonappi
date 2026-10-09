@@ -39,7 +39,7 @@ export function AuthProvider({ children }) {
     checkAuth();
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (email, _password) => {
     // Mock login - in production, this would call Firebase Auth
     setLoading(true);
     try {
@@ -117,6 +117,7 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
