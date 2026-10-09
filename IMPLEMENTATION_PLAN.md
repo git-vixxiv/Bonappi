@@ -35,8 +35,8 @@ Scope is defined in [docs/PILOT_SPEC.md](docs/PILOT_SPEC.md). This plan sequence
 - [ ] `app_fee_money` = 6% − Square processing; per-restaurant rate setting
 - [ ] Apple Pay / Google Pay via Square Web Payments SDK (domain verification)
 - [ ] Order confirmation + status screen for diner
-- [ ] Restaurant tablet dashboard: accept/decline, live order board, arrived/fired/served/close, final check total entry
-- [ ] Order event timestamps recorded on every status change
+- [x] Restaurant tablet dashboard: accept/decline, live order board, arrived/fired/served/close, final check total entry (`/kitchen`, polls every 15s; refunds on decline come with payments)
+- [x] Order event timestamps recorded on every status change
 - [ ] Sandbox test: paid API orders in Square POS and KDS
 
 ## Phase 3: Arrival + policies (week 4)
