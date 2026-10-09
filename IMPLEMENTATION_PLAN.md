@@ -28,8 +28,8 @@ Scope is defined in [docs/PILOT_SPEC.md](docs/PILOT_SPEC.md). This plan sequence
 
 ## Phase 2: Order + pay (weeks 2–3) → **first restaurant demo**
 
-- [ ] Arrival time + party size picker (reservation stand-in)
-- [ ] Checkout: $20 minimum, prepay in full, no tip line
+- [x] Arrival time + party size picker (reservation stand-in), in the restaurant's timezone
+- [ ] Checkout: $20 minimum, prepay in full, no tip line (cart side done: minimum, no tip, saved across reloads)
 - [ ] Payment provider interface; Square implementation (sandbox)
 - [ ] Square OAuth connect flow for restaurants
 - [ ] `app_fee_money` = 6% − Square processing; per-restaurant rate setting

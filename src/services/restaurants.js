@@ -73,6 +73,7 @@ export function mapRestaurant(row) {
       coordinates,
     },
     hours: row.hours,
+    timezone: row.timezone,
     photo: row.photo_url,
     rating: Number(row.rating),
     reviewCount: row.review_count,

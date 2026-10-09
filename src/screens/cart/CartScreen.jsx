@@ -5,19 +5,15 @@ import {
   Plus,
   Trash2,
   ShoppingBag,
-  Clock,
 } from 'lucide-react';
 import { Button, Card } from '../../components/ui';
+import ArrivalPicker from '../../components/cart/ArrivalPicker';
 import { useCart } from '../../contexts';
+import { useRestaurant } from '../../hooks/useRestaurants';
 import { ROUTES, getRestaurantRoute } from '../../constants/routes';
 
-const TIP_OPTIONS = [
-  { label: '15%', value: 15 },
-  { label: '18%', value: 18 },
-  { label: '20%', value: 20 },
-  { label: '25%', value: 25 },
-  { label: 'Custom', value: 'custom' },
-];
+// A saved arrival time must still be at least this far in the future
+const MIN_LEAD_MS = 25 * 60 * 1000;
 
 export default function CartScreen() {
   const navigate = useNavigate();
@@ -28,26 +24,27 @@ export default function CartScreen() {
     itemCount,
     subtotal,
     tax,
-    tipAmount,
     total,
-    tip,
-    setTip,
+    minOrder,
+    amountToMinimum,
+    meetsMinimum,
+    reservation,
+    setReservation,
     updateItemQuantity,
     removeItem,
     clearCart,
   } = useCart();
 
-  const handleTipSelect = (value) => {
-    if (value === 'custom') {
-      // For now, just set to 20% - could open a modal for custom amount
-      setTip({ percentage: 20, amount: 0 });
-    } else {
-      setTip({ percentage: value, amount: 0 });
-    }
-  };
+  const { data } = useRestaurant(restaurantId);
+  const restaurant = data?.restaurant;
+
+  // Checked at render so a time saved yesterday doesn't slip through
+  // eslint-disable-next-line react-hooks/purity
+  const arrivalValid = !!reservation?.arrivalAt && Date.parse(reservation.arrivalAt) - Date.now() > MIN_LEAD_MS;
+  const canCheckout = meetsMinimum && arrivalValid;
 
   const handleCheckout = () => {
-    navigate(ROUTES.CHECKOUT);
+    if (canCheckout) navigate(ROUTES.CHECKOUT);
   };
 
   // Empty cart state
@@ -198,32 +195,10 @@ export default function CartScreen() {
           + Add more items
         </button>
 
-        {/* Tip selector */}
-        <Card>
-          <h3 className="font-semibold text-gray-900 mb-3">Add a tip</h3>
-          <div className="flex gap-2">
-            {TIP_OPTIONS.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => handleTipSelect(option.value)}
-                className={`
-                  flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors
-                  ${tip.percentage === option.value
-                    ? 'bg-primary-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }
-                `}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-          {tip.percentage > 0 && (
-            <p className="text-sm text-gray-500 mt-2 text-center">
-              ${tipAmount.toFixed(2)} tip
-            </p>
-          )}
-        </Card>
+        {/* Arrival time + party size */}
+        {restaurant && (
+          <ArrivalPicker restaurant={restaurant} value={reservation} onChange={setReservation} />
+        )}
 
         {/* Order summary */}
         <Card>
@@ -237,16 +212,15 @@ export default function CartScreen() {
               <span className="text-gray-600">Tax</span>
               <span className="text-gray-900">${tax.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Tip ({tip.percentage}%)</span>
-              <span className="text-gray-900">${tipAmount.toFixed(2)}</span>
-            </div>
             <div className="border-t border-gray-100 pt-2 mt-2">
               <div className="flex justify-between text-base font-semibold">
                 <span className="text-gray-900">Total</span>
                 <span className="text-gray-900">${total.toFixed(2)}</span>
               </div>
             </div>
+            <p className="text-xs text-gray-500 pt-1">
+              Paid now so your food is ready when you arrive. Tip your server at the table.
+            </p>
           </div>
         </Card>
       </div>
@@ -254,13 +228,15 @@ export default function CartScreen() {
       {/* Fixed bottom bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 safe-area-inset-bottom">
         <div className="max-w-lg mx-auto space-y-3">
-          {/* Reservation time placeholder */}
-          <button className="w-full flex items-center justify-center gap-2 py-2 text-primary-600 font-medium">
-            <Clock className="w-4 h-4" />
-            <span>Select pickup/reservation time</span>
-          </button>
+          {!meetsMinimum ? (
+            <p className="text-sm text-center text-gray-600">
+              Add ${amountToMinimum.toFixed(2)} more to reach the ${minOrder.toFixed(0)} minimum
+            </p>
+          ) : !arrivalValid ? (
+            <p className="text-sm text-center text-gray-600">Choose your arrival time above</p>
+          ) : null}
 
-          <Button fullWidth size="lg" onClick={handleCheckout}>
+          <Button fullWidth size="lg" onClick={handleCheckout} disabled={!canCheckout}>
             Continue to Checkout · ${total.toFixed(2)}
           </Button>
         </div>
