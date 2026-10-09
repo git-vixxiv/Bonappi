@@ -107,3 +107,9 @@ export function formatArrival(iso, timeZone) {
     minute: '2-digit',
   });
 }
+
+// Midnight today in `timeZone`, as a Date
+export function startOfZonedDay(timeZone, now = new Date()) {
+  const p = zonedParts(now, timeZone);
+  return zonedTimeToDate({ ...p, hour: 0, minute: 0 }, timeZone);
+}

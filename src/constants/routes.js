@@ -5,6 +5,9 @@ export const ROUTES = {
   REGISTER: '/register',
   ONBOARDING: '/onboarding',
 
+  // Restaurant staff
+  KITCHEN: '/kitchen',
+
   // Main app routes
   HOME: '/',
   DISCOVER: '/',

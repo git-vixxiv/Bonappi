@@ -11,6 +11,7 @@ import RestaurantScreen from './screens/restaurant/RestaurantScreen';
 import DishScreen from './screens/restaurant/DishScreen';
 import CartScreen from './screens/cart/CartScreen';
 import PlaceholderScreen from './screens/PlaceholderScreen';
+import KitchenScreen from './screens/kitchen/KitchenScreen';
 
 
 export const router = createBrowserRouter([
@@ -22,6 +23,10 @@ export const router = createBrowserRouter([
   {
     path: ROUTES.REGISTER,
     element: <LoginScreen />,
+  },
+  {
+    path: ROUTES.KITCHEN,
+    element: <KitchenScreen />,
   },
 
   // Main app routes (with bottom nav)

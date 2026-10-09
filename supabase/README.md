@@ -34,3 +34,9 @@ select r.id, u.id, 'owner'
 from public.restaurants r, auth.users u
 where r.slug = 'valentinos-pizzeria' and u.email = 'someone@example.com';
 ```
+
+## Trying the kitchen board
+
+`demo/kitchen_demo.sql` makes an account staff at Valentino's and adds three
+sample orders. Sign in once with that email, edit the email in the file, run
+it, then open `/kitchen`.

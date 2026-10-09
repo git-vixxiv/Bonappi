@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate, useSearchParams } from 'react-router-dom';
 import { Phone, Mail, KeyRound, User } from 'lucide-react';
 import { Button, Input, Card } from '../../components/ui';
 import { useAuth } from '../../contexts';
@@ -10,9 +10,14 @@ import { normalizePhone } from '../../utils/phone';
 // fallback (and how restaurant staff sign in).
 export default function LoginScreen() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  // Only allow in-app paths as a return target
+  const next = searchParams.get('next')?.startsWith('/') && !searchParams.get('next').startsWith('//')
+    ? searchParams.get('next')
+    : ROUTES.HOME;
   const { isAuthenticated, needsName, sendCode, verifyCode, updateProfile } = useAuth();
 
-  const [method, setMethod] = useState('phone');
+  const [method, setMethod] = useState(next === ROUTES.KITCHEN ? 'email' : 'phone');
   const [step, setStep] = useState('identify');
   const [identifier, setIdentifier] = useState('');
   const [target, setTarget] = useState(null);
@@ -22,7 +27,7 @@ export default function LoginScreen() {
   const [error, setError] = useState('');
 
   if (isAuthenticated && !needsName) {
-    return <Navigate to={ROUTES.HOME} replace />;
+    return <Navigate to={next} replace />;
   }
 
   const switchMethod = () => {
@@ -35,24 +40,24 @@ export default function LoginScreen() {
     e.preventDefault();
     setError('');
 
-    let next;
+    let contact;
     if (method === 'phone') {
       const phone = normalizePhone(identifier);
       if (!phone) {
         setError('Enter a 10-digit US phone number.');
         return;
       }
-      next = { phone };
+      contact = { phone };
     } else {
-      next = { email: identifier.trim().toLowerCase() };
+      contact = { email: identifier.trim().toLowerCase() };
     }
 
     setLoading(true);
-    const result = await sendCode(next);
+    const result = await sendCode(contact);
     setLoading(false);
 
     if (result.success) {
-      setTarget(next);
+      setTarget(contact);
       setStep('verify');
     } else {
       setError(result.error);
@@ -74,7 +79,7 @@ export default function LoginScreen() {
     setLoading(true);
     const result = await updateProfile({ name: name.trim() });
     setLoading(false);
-    if (result.success) navigate(ROUTES.HOME, { replace: true });
+    if (result.success) navigate(next, { replace: true });
     else setError(result.error);
   };
 
