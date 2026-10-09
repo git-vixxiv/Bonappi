@@ -27,7 +27,7 @@ const menuItems = [
 
 export default function ProfileScreen() {
   const navigate = useNavigate();
-  const { user, logout, devLogin, isAuthenticated } = useAuth();
+  const { user, logout, isAuthenticated } = useAuth();
 
   const currentLevel = getUserLevel(user?.totalVisits || 0);
 
@@ -51,14 +51,7 @@ export default function ProfileScreen() {
             </p>
             <div className="space-y-3 max-w-xs mx-auto">
               <Button fullWidth onClick={() => navigate(ROUTES.LOGIN)}>
-                Sign In
-              </Button>
-              <Button variant="outline" fullWidth onClick={() => navigate(ROUTES.REGISTER)}>
-                Create Account
-              </Button>
-              {/* Dev helper button */}
-              <Button variant="ghost" size="sm" fullWidth onClick={devLogin}>
-                Dev: Quick Login
+                Sign in or create account
               </Button>
             </div>
           </Card>
@@ -93,7 +86,7 @@ export default function ProfileScreen() {
               <h2 className="text-xl font-semibold text-gray-900">
                 {user.name}
               </h2>
-              <p className="text-sm text-gray-500">{user.email}</p>
+              <p className="text-sm text-gray-500">{user.phone ? `+${user.phone}` : user.email}</p>
               <div className="flex items-center gap-2 mt-1">
                 <Badge variant="regular" size="sm" icon={currentLevel.icon}>
                   {currentLevel.name}

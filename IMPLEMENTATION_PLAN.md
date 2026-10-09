@@ -19,11 +19,11 @@ Scope is defined in [docs/PILOT_SPEC.md](docs/PILOT_SPEC.md). This plan sequence
 
 ## Phase 1: Foundation (week 1)
 
-- [ ] Supabase project: schema for restaurants, menus, orders, order events, reviews, users, restaurant staff
-- [ ] Row-level security policies (diner sees own data; staff see their restaurant only)
-- [ ] Phone + SMS code sign-in for diners; email sign-in for restaurant staff
-- [ ] Replace mock data layer with Supabase queries; seed sample Austin menus
-- [ ] Vercel deploy with preview URLs per PR
+- [x] Supabase project: schema for restaurants, menus, orders, order events, reviews, users, restaurant staff
+- [x] Row-level security policies (diner sees own data; staff see their restaurant only), tested locally
+- [x] Phone + SMS code sign-in for diners; email sign-in for restaurant staff (SMS provider still to configure)
+- [x] Replace mock data layer with Supabase queries; seed sample Austin menus
+- [x] Vercel deploy with preview URLs per PR
 - [ ] PWA manifest, icons, installable on iOS/Android
 
 ## Phase 2: Order + pay (weeks 2–3) → **first restaurant demo**

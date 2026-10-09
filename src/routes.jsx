@@ -21,11 +21,7 @@ export const router = createBrowserRouter([
   },
   {
     path: ROUTES.REGISTER,
-    element: <PlaceholderScreen title="Register" />,
-  },
-  {
-    path: ROUTES.FORGOT_PASSWORD,
-    element: <PlaceholderScreen title="Forgot Password" />,
+    element: <LoginScreen />,
   },
 
   // Main app routes (with bottom nav)

@@ -13,8 +13,8 @@ import {
 } from 'lucide-react';
 import { Button, Card, Badge, StarRating, PriceLevel } from '../../components/ui';
 import { MenuItemCard } from '../../components/restaurant';
-import { getRestaurantById } from '../../data/restaurants';
-import { getPopularItems, getItemsByCategory } from '../../data/menuItems';
+import { ScreenState } from '../../components/layout';
+import { useRestaurant } from '../../hooks/useRestaurants';
 import { ROUTES } from '../../constants/routes';
 import { useAuth } from '../../contexts';
 
@@ -31,18 +31,28 @@ export default function RestaurantScreen() {
   const [activeTab, setActiveTab] = useState('popular');
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const restaurant = getRestaurantById(id);
-  const popularItems = getPopularItems(id);
-  const itemsByCategory = useMemo(() => getItemsByCategory(id), [id]);
+  const { data, loading, error } = useRestaurant(id);
+  const restaurant = data?.restaurant;
+  const menu = useMemo(() => data?.menu ?? [], [data]);
+  const popularItems = menu.filter((item) => item.popular);
+  const itemsByCategory = useMemo(
+    () =>
+      menu.reduce((acc, item) => {
+        (acc[item.category] ||= []).push(item);
+        return acc;
+      }, {}),
+    [menu]
+  );
 
-  if (!restaurant) {
+  if (loading) return <ScreenState loading />;
+  if (error || !restaurant) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-xl font-semibold text-gray-900 mb-2">Restaurant not found</h1>
-          <Button onClick={() => navigate(ROUTES.HOME)}>Go Home</Button>
-        </div>
-      </div>
+      <ScreenState
+        title={error ? 'Could not load restaurant' : 'Restaurant not found'}
+        message={error ? 'Check your connection and try again.' : undefined}
+        actionLabel="Go Home"
+        onAction={() => navigate(ROUTES.HOME)}
+      />
     );
   }
 

@@ -9,8 +9,8 @@ import {
   Check,
 } from 'lucide-react';
 import { Button, Card, Badge, StarRating, Textarea } from '../../components/ui';
-import { getRestaurantById } from '../../data/restaurants';
-import { getMenuItemById } from '../../data/menuItems';
+import { ScreenState } from '../../components/layout';
+import { useRestaurant } from '../../hooks/useRestaurants';
 import { ROUTES } from '../../constants/routes';
 import { useCart } from '../../contexts';
 
@@ -19,8 +19,9 @@ export default function DishScreen() {
   const navigate = useNavigate();
   const { addItem, setRestaurant } = useCart();
 
-  const restaurant = getRestaurantById(restaurantId);
-  const dish = getMenuItemById(restaurantId, dishId);
+  const { data, loading, error } = useRestaurant(restaurantId);
+  const restaurant = data?.restaurant;
+  const dish = data?.menu.find((item) => item.id === dishId);
 
   // Selection state
   const [sizeChoice, setSelectedSize] = useState(null);
@@ -115,14 +116,15 @@ export default function DishScreen() {
     navigate(-1);
   };
 
-  if (!dish || !restaurant) {
+  if (loading) return <ScreenState loading />;
+  if (error || !dish || !restaurant) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-xl font-semibold text-gray-900 mb-2">Dish not found</h1>
-          <Button onClick={() => navigate(ROUTES.HOME)}>Go Home</Button>
-        </div>
-      </div>
+      <ScreenState
+        title={error ? 'Could not load dish' : 'Dish not found'}
+        message={error ? 'Check your connection and try again.' : undefined}
+        actionLabel="Go Home"
+        onAction={() => navigate(ROUTES.HOME)}
+      />
     );
   }
 

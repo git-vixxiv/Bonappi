@@ -1,117 +1,101 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { supabase } from '../services/supabase';
 
 const AuthContext = createContext(null);
 
-// Mock user for development
-const MOCK_USER = {
-  id: 'user_001',
-  email: 'joe@launchstudios.com',
-  name: 'Joe',
-  photo: null,
-  phoneNumber: '+1234567890',
-  createdAt: '2024-01-01T00:00:00Z',
-  location: {
-    city: 'Austin',
-    state: 'TX',
-  },
-  dietaryPreferences: [],
-  level: 'Food Explorer',
-  totalVisits: 47,
-  totalReviews: 32,
-  regularRestaurants: [],
-  achievements: [],
-};
+// Until location and gamification are wired up, every diner starts in Austin
+// with zeroed stats.
+function toAppUser(authUser, profile) {
+  if (!authUser) return null;
+  return {
+    id: authUser.id,
+    email: authUser.email ?? null,
+    phone: authUser.phone ?? null,
+    name: profile?.display_name || '',
+    photo: null,
+    location: { city: 'Austin', state: 'TX' },
+    totalVisits: 0,
+    totalReviews: 0,
+    regularRestaurants: [],
+    achievements: [],
+  };
+}
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [authUser, setAuthUser] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Check for existing session (mock implementation)
-    const checkAuth = async () => {
-      const savedUser = localStorage.getItem('bonappi_user');
-      if (savedUser) {
-        setUser(JSON.parse(savedUser));
-      }
-      setLoading(false);
-    };
-
-    checkAuth();
+  const loadProfile = useCallback(async (userId) => {
+    if (!userId) {
+      setProfile(null);
+      return;
+    }
+    const { data } = await supabase
+      .from('profiles')
+      .select('display_name')
+      .eq('id', userId)
+      .maybeSingle();
+    setProfile(data);
   }, []);
 
-  const login = async (email, _password) => {
-    // Mock login - in production, this would call Firebase Auth
-    setLoading(true);
-    try {
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
+  useEffect(() => {
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      const nextUser = session?.user ?? null;
+      setAuthUser(nextUser);
+      // Defer the query so it doesn't run inside Supabase's auth callback
+      setTimeout(() => {
+        loadProfile(nextUser?.id).finally(() => setLoading(false));
+      }, 0);
+    });
+    return () => listener.subscription.unsubscribe();
+  }, [loadProfile]);
 
-      // Mock successful login
-      const userData = { ...MOCK_USER, email };
-      setUser(userData);
-      localStorage.setItem('bonappi_user', JSON.stringify(userData));
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: error.message };
-    } finally {
-      setLoading(false);
-    }
+  // Step 1: send a one-time code by text (phone) or email
+  const sendCode = async ({ phone, email }) => {
+    const { error } = phone
+      ? await supabase.auth.signInWithOtp({ phone })
+      : await supabase.auth.signInWithOtp({
+          email,
+          options: { emailRedirectTo: window.location.origin },
+        });
+    return error ? { success: false, error: error.message } : { success: true };
   };
 
-  const register = async (email, password, name) => {
-    // Mock registration
-    setLoading(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      const userData = {
-        ...MOCK_USER,
-        id: `user_${Date.now()}`,
-        email,
-        name,
-        totalVisits: 0,
-        totalReviews: 0,
-        createdAt: new Date().toISOString(),
-      };
-      setUser(userData);
-      localStorage.setItem('bonappi_user', JSON.stringify(userData));
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: error.message };
-    } finally {
-      setLoading(false);
-    }
+  // Step 2: verify the code
+  const verifyCode = async ({ phone, email, token }) => {
+    const { error } = phone
+      ? await supabase.auth.verifyOtp({ phone, token, type: 'sms' })
+      : await supabase.auth.verifyOtp({ email, token, type: 'email' });
+    return error ? { success: false, error: error.message } : { success: true };
   };
 
   const logout = async () => {
-    setUser(null);
-    localStorage.removeItem('bonappi_user');
+    await supabase.auth.signOut();
   };
 
-  const updateProfile = async (updates) => {
-    if (!user) return { success: false, error: 'Not authenticated' };
-
-    const updatedUser = { ...user, ...updates };
-    setUser(updatedUser);
-    localStorage.setItem('bonappi_user', JSON.stringify(updatedUser));
+  const updateProfile = async ({ name }) => {
+    if (!authUser) return { success: false, error: 'Not signed in' };
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({ display_name: name, updated_at: new Date().toISOString() })
+      .eq('id', authUser.id)
+      .select('display_name')
+      .single();
+    if (error) return { success: false, error: error.message };
+    setProfile(data);
     return { success: true };
   };
 
-  // Development helper: auto-login for easier testing
-  const devLogin = () => {
-    setUser(MOCK_USER);
-    localStorage.setItem('bonappi_user', JSON.stringify(MOCK_USER));
-  };
-
   const value = {
-    user,
+    user: toAppUser(authUser, profile),
     loading,
-    isAuthenticated: !!user,
-    login,
-    register,
+    isAuthenticated: !!authUser,
+    needsName: !!authUser && !profile?.display_name,
+    sendCode,
+    verifyCode,
     logout,
     updateProfile,
-    devLogin,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
